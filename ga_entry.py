@@ -38,7 +38,7 @@ def m(dataset):
 #print(m(df1))
 #4980.749678963979 is the mean, provided that we did not include duplicates
 
-#this creates a pivot table; how do I use the individual columns it creates?
+#this creates a pivot table, but was not sufficient for proper data handling, and was not used to create visualizations.
 #c_backers = df.pivot_table(columns=['backers'], aggfunc='size')
 #print(min(df2), max(df2))
 #frequency = df['backers'].value_counts()
@@ -51,12 +51,14 @@ df.info()
 df['Funding by Month'] = df['funded date'].apply(lambda x: dt.datetime.strptime(x, '%a, %d %b %Y %X -%f').strftime('%B'))
 df['Funding by Day'] = df['funded date'].apply(lambda x: dt.datetime.strptime(x, '%a, %d %b %Y %X -%f').strftime('%a'))
 
+
+#When looking at success to failures, this was the method used to properly handle the data viz.
 #status_bool = {'successful': True, 'failed': False, 'suspended': False, 'canceled': False}
 #df['status_bool'] = df['status'].map(status_bool)
 #print(df['status_bool'].count(0))
 
 #print(df['category'].unique().tolist())
-
+#While the binary of success/'other' was usable, I began exploring further to see if it could be broken down for better case by case basis.
 s_n = {'successful': 0, 'failed': 1, 'suspended': 2, 'canceled': 3, 'live': 4}
 df['s_n'] =df['status'].map(s_n)
 #ds_arr = np.array(df['s_n'])
@@ -65,7 +67,7 @@ df['s_n'] =df['status'].map(s_n)
 frequency = df['s_n'].value_counts()
 print(frequency)
 
-##Check for normality
+##Checking normality.
 #dn_test = np.array(df['duration'])
 #k,p = stats.mstats.normaltest(dn_test)
 #if p < 0.05:
@@ -77,6 +79,10 @@ print(frequency)
 ###Check for duplicate projects prior to mean
 #print(proj.duplicated(keep = False))
 
+#Playing with status,
+#s_n = {'successful': 0, 'failed': 1, 'suspended': 2, 'canceled': 3, 'live': 4}
+#df['s_n'] = df['status'].map(s_n)
+
 ##Checking distribution of duration
 #plt.hist(df['duration'], density= True)
 #plt.xlabel('Time')
@@ -85,14 +91,12 @@ print(frequency)
 #sns.kdeplot(df['duration'])
 #plt.title('Duration')
 
-##creating a histogram of backers
+##Creating a plot of backers
 #plt.hist(filt_backers_df['backers'])
 #plt.xlabel('Backers')
 #plt.ylabel('Freq of Projects')
 #plt.title('Plotting # of Backers')
 ##Histogram, minus the outliers
-
-#plt.show()
 #plt.hist(filt_backers_df)
 #plt.xlabel('Backers')
 #plt.ylabel('Freq of Projects')
@@ -103,20 +107,18 @@ print(frequency)
 #plt.xlabel('Backers')
 #plt.title('Project Backers - Removed Outliers')
 
-##Throwing together slides for presentation
+##Slides for presentation
 #Pie Chart
 plt.pie(frequency)
 plt.ylabel('Status')
 plt.title('Project Status')
 plt.legend(df['status'],loc=3)
-#Playing with status
-#s_n = {'successful': 0, 'failed': 1, 'suspended': 2, 'canceled': 3, 'live': 4}
-#df['s_n'] = df['status'].map(s_n)
 #print(df['s_n'].count(0))
 #print(df['status'].count('successful'))
 #plt.pie(df['status_bool'])
 #plt.ylabel('Status')
 #plt.title('Project Status')
+
 
 
 #Pledges to total Duration
